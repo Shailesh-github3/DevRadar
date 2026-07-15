@@ -16,6 +16,7 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
             <Route path="search" element={<Search />} />
+            <Route path="repo/:owner/:repoName" element={<RepoDetails />} />
           </Route>
         </Routes>
       </BrowserRouter>

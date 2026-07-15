@@ -27,3 +27,17 @@ export const fetchRepositories = async (username) => {
   });
   return response.data;
 };
+
+export const fetchRepositoryDetails = async (username, repoName) => {
+  const response = await githubApi.get(`/repos/${username}/${repoName}`);
+  return response.data;
+}
+
+export const fetchReadme = async (username, repoName) => {
+  const response = await githubApi.get(`/repos/${username}/${repoName}/readme`, {
+    headers: {
+      Accept: 'application/vnd.github.v3.raw', // Get raw content
+    },
+  });
+  return response.data;
+}
