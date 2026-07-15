@@ -1,51 +1,40 @@
 import { useState } from 'react';
+import { Container } from 'react-bootstrap';
 import SearchBar from '../components/SearchBar';
-import { useGithubUser } from '../hooks/useGithubUser';
-import { Alert, Spinner } from 'react-bootstrap';
+import LoadingSpinner from '../components/LoadingSpinner';
+import ErrorAlert from '../components/ErrorAlert';
+import ProfileCard from '../components/ProfileCard';
+import useGithubUser from '../hooks/useGithubUser';
 
 function Search() {
-  // 1. Input state (updates on every keystroke)
   const [query, setQuery] = useState('');
-  // 2. Trigger state (updates only on form submit)
   const [searchTerm, setSearchTerm] = useState('');
 
-  // React Query hook. It watches 'searchTerm'.
   const { data: user, isLoading, isError, error } = useGithubUser(searchTerm);
 
-  const handleChange = (e) => setQuery(e.target.value);
+  const handleSubmit = (e) => {
+    if (query.trim()) {
+      setSearchTerm(query.trim());
+    }
+  };
 
-  const handleSubmit = () => {
-    if (!query.trim()) return;
-    setSearchTerm(query); // This triggers the API call
+  // Controller logic: Translates raw HTTP codes to user-friendly messages
+  const getErrorMessage = () => {
+    if (error?.response?.status === 404) return 'User not found. Please check the username.';
+    if (error?.response?.status === 403) return 'API rate limit exceeded. Please try again later.';
+    return error?.response?.data?.message || 'An unexpected error occurred.';
   };
 
   return (
-    <div>
-      <h2>Developer Search</h2>
-      <SearchBar value={query} onChange={handleChange} onSubmit={handleSubmit} />
+    <Container className="my-5">
+      <h2 className="mb-4">Developer Search</h2>
+      
+      <SearchBar value={query} onChange={(e) => setQuery(e.target.value)} onSubmit={handleSubmit} />
 
-      {/* Loading State */}
-      {isLoading && (
-        <div className="text-center my-4">
-          <Spinner animation="border" variant="primary" />
-        </div>
-      )}
-
-      {/* Error State */}
-      {isError && (
-        <Alert variant="danger">
-          Error: {error.response?.data?.message || 'Failed to fetch user'}
-        </Alert>
-      )}
-
-      {/* Success State */}
-      {user && (
-        <Alert variant="success">
-          Found user: <strong>{user.login}</strong> (ID: {user.id})
-        </Alert>
-      )}
-
-    </div>
+      {isLoading && <LoadingSpinner />}
+      {isError && <ErrorAlert message={getErrorMessage()} />}
+      {user && <ProfileCard user={user} />}
+    </Container>
   );
 }
 
