@@ -16,3 +16,14 @@ export const fetchGithubUser = async (username) => {
   const response = await githubApi.get(`/users/${username}`);
   return response.data;
 };
+
+export const fetchRepositories = async (username) => {
+  const response = await githubApi.get(`/users/${username}/repos`,{
+    params: {
+      per_page : 100,
+      sort : 'updated',
+      direction : 'desc',
+    },
+  });
+  return response.data;
+};
