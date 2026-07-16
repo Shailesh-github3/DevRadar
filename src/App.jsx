@@ -3,6 +3,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Search from './pages/Search';
+import RepoDetails from './pages/RepoDetails';
+import Analytics from './components/Analytics';
 
 // Initialize the React Query client (acts as the global cache manager)
 const queryClient = new QueryClient();
@@ -17,6 +19,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="search" element={<Search />} />
             <Route path="repo/:owner/:repoName" element={<RepoDetails />} />
+            <Route path="analytics/:username" element={<Analytics />} />
           </Route>
         </Routes>
       </BrowserRouter>
