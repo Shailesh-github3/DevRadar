@@ -1,8 +1,9 @@
 import { Card, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { BarChart3 } from "lucide-react";
+import BookmarkButton from "./BookmarkButton";
 
-function ProfileCard({ user }) {
+function ProfileCard({ user, isBookmarked, onToggleBookmark }) {
   if (!user) return null;
 
   return (
@@ -18,7 +19,7 @@ function ProfileCard({ user }) {
             className="me-4"
           />
 
-          <div>
+          <div className="flex-grow-1">
             <Card.Title>{user.name || user.login}</Card.Title>
 
             <Card.Subtitle className="mb-2 text-muted">
@@ -45,7 +46,12 @@ function ProfileCard({ user }) {
           </div>
         </div>
 
-        <div className="d-flex justify-content-end mt-3 border-top pt-3">
+        <div className="d-flex justify-content-end mt-3 border-top pt-3 gap-2">
+          <BookmarkButton
+            isBookmarked={isBookmarked}
+            onToggle={() => onToggleBookmark(user.login)}
+          />
+
           <Link
             to={`/analytics/${user.login}`}
             className="btn btn-primary d-flex align-items-center gap-2"

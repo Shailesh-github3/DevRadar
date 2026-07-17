@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import RepoDetails from './pages/RepoDetails';
 import Analytics from './components/Analytics';
+import Bookmarks from './components/Bookmarks';
 
 // Initialize the React Query client (acts as the global cache manager)
 const queryClient = new QueryClient();
@@ -20,6 +21,7 @@ function App() {
             <Route path="search" element={<Search />} />
             <Route path="repo/:owner/:repoName" element={<RepoDetails />} />
             <Route path="analytics/:username" element={<Analytics />} />
+            <Route path="bookmarks" element={<Bookmarks />} />
           </Route>
         </Routes>
       </BrowserRouter>
