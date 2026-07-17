@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {Suspense , lazy} from 'react';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Search from './pages/Search';
@@ -10,11 +11,17 @@ import Bookmarks from './components/Bookmarks';
 // Initialize the React Query client (acts as the global cache manager)
 const queryClient = new QueryClient();
 
+// Lazily loaded (Secondary routes - downloaded only when visited)
+const RepoDetails = lazy(() => import('./pages/RepoDetails'));
+const Analytics = lazy(() => import('./pages/Analytics'));
+const Bookmarks = lazy(() => import('./pages/Bookmarks'));
+
 function App() {
   return (
     // Wrap the entire app so all components can access the cache
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+      <Suspense fallback={<PageLoader />}>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />
@@ -24,6 +31,7 @@ function App() {
             <Route path="bookmarks" element={<Bookmarks />} />
           </Route>
         </Routes>
+      </Suspense>
       </BrowserRouter>
     </QueryClientProvider>
   );

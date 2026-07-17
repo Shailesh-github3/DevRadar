@@ -7,6 +7,7 @@ import { getBookmarks, addBookmark, removeBookmark } from '../services/storageSe
  * Purpose: Manages React state for bookmarks and syncs with LocalStorage service.
  * Acts as the bridge between persistent storage and reactive UI.
  */
+
 function useBookmarks() {
   // Lazy initialization: only reads from LocalStorage on the very first render.
   const [bookmarks, setBookmarks] = useState(() => getBookmarks());
